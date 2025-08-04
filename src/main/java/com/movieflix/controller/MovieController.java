@@ -28,4 +28,11 @@ public class MovieController {
     public ResponseEntity<List<MovieResponse>> findAll (){
         return ResponseEntity.ok(movieService.findAll().stream().map(MovieMapper::toMovieResponse).toList());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MovieResponse> findById (@PathVariable Long id){
+        return movieService.findById(id)
+                .map(movie -> ResponseEntity.ok(MovieMapper.toMovieResponse(movie)))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
