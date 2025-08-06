@@ -31,11 +31,11 @@ public class Movie {
 
     private double rating;
 
-    @CreationTimestamp //ANOTATE
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp //ANOTATE
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
