@@ -15,42 +15,76 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Movie", description = "Method responsible for managing movies.")
+@Tag(name = "Movie", description = "Methods responsible for managing movies.")
 public interface MovieControllerDoc {
-    @Operation(summary = "Save movie", description = "Método responsável por realizar o salvamento de um novo filme.")
-    @ApiResponse(responseCode = "201", description = "Filme salvo com sucesso",
+    
+    @Operation(summary = "Save movie", description = "Method responsible for saving a new movie.")
+    @ApiResponse(responseCode = "201", description = "Movie saved successfully",
             content = @Content(schema = @Schema(implementation = MovieResponse.class))
     )
+    @ApiResponse(responseCode = "500", description = "Internal error")
     @PostMapping
     ResponseEntity<MovieResponse> save (@Valid @RequestBody MovieRequest request);
+    
     @Operation(
-            summary = "Buscar filmes",
-            description = "Método responsável por retornar todos os filmes cadastrados.",
+            summary = "Find all movies",
+            description = "Method responsible for returning all registered movies.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @ApiResponse(responseCode = "201", description = "Filme salvo com sucesso",
+    @ApiResponse(responseCode = "200", description = "Movies successfully listed",
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponse.class)))
     )
+    @ApiResponse(responseCode = "500", description = "Internal error")
     @GetMapping
     ResponseEntity<List<MovieResponse>> findAll ();
 
     @Operation(
-            summary = "Descrever filme",
-            description = "Método responsável por retornar todos os filmes cadastrados.",
+            summary = "Find movie by ID",
+            description = "Method responsible for returning a specific movie by its ID.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    @ApiResponse(responseCode = "201", description = "Filme salvo com sucesso",
-            content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponse.class)))
+    @ApiResponse(responseCode = "200", description = "Movie found successfully",
+            content = @Content(schema = @Schema(implementation = MovieResponse.class))
     )
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    @ApiResponse(responseCode = "500", description = "Internal error")
     @GetMapping("/{id}")
     public ResponseEntity<MovieResponse> findById (@PathVariable Long id);
 
+    @Operation(
+            summary = "Update movie",
+            description = "Method responsible for updating an existing movie.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(responseCode = "200", description = "Movie updated successfully",
+            content = @Content(schema = @Schema(implementation = MovieResponse.class))
+    )
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    @ApiResponse(responseCode = "500", description = "Internal error")
     @PutMapping("/{id}")
     public ResponseEntity<MovieResponse> update (@PathVariable Long id, @Valid @RequestBody MovieRequest request);
 
+    @Operation(
+            summary = "Search movies by category",
+            description = "Method responsible for finding movies by category IDs.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(responseCode = "200", description = "Movies found successfully",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponse.class)))
+    )
+    @ApiResponse(responseCode = "400", description = "Category not found: {id}")
+    @ApiResponse(responseCode = "500", description = "Internal error")
     @GetMapping("/search/")
     ResponseEntity<List<MovieResponse>> findByCategory (@RequestParam  List<Long> categoriesIds);
 
+    @Operation(
+            summary = "Delete movie",
+            description = "Method responsible for deleting a movie by its ID.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(responseCode = "204", description = "Movie deleted successfully")
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    @ApiResponse(responseCode = "500", description = "Internal error")
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete (@PathVariable Long id);
 }
