@@ -26,7 +26,7 @@ public class TokenService {
                 .withClaim("name", user.getName())
                 .withExpiresAt(Instant.now().plusSeconds(86400))
                 .withIssuedAt(Instant.now())
-                .withIssuer("Api Movieflix")
+                .withIssuer("Movieflix API")
                 .sign(algorithm);
     }
 

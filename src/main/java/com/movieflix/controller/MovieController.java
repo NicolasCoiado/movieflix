@@ -46,7 +46,7 @@ public class MovieController implements MovieControllerDoc {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/search/")
+    @GetMapping("/search/") //TODO: FIX NOT FOUND CATEGORY TO RETURN THIS ERROR TO USER
     public ResponseEntity<List<MovieResponse>> findByCategory (@RequestParam  List<Long> categoriesIds){
 
         List<MovieResponse> movies = movieService.findByCategory(categoriesIds)

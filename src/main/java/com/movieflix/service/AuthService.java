@@ -15,6 +15,6 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Usuário ou senha inválidos."));
+        return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Invalid username or password."));
     }
 }

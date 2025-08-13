@@ -14,7 +14,7 @@ public record MovieRequest(
         @Schema(type = "String", description = "Movie description")
         String description,
         @Schema(type = "date", description = "Movie release date")
-        @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy") //ANOTATE
+        @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         LocalDate releaseDate,
         @Schema(type = "double", description = "Movie rating. Eg: 6.6")
         double rating,

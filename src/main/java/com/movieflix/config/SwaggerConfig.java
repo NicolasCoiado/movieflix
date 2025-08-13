@@ -24,7 +24,7 @@ public class SwaggerConfig {
 
         info.title("Movieflix");
         info.version("v1");
-        info.description("Aplicação para gerenciamento de catálogo de filmes");
+        info.description("Application for managing movie catalog");
         info.contact(contact);
 
         return new OpenAPI().info(info);

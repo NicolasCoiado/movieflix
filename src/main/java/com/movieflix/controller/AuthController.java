@@ -46,7 +46,7 @@ public class AuthController {
 
             return ResponseEntity.ok(new LoginResponse(token));
         }catch (BadCredentialsException e){
-            throw new UsernameOrPasswordInvalidException("Usuário ou senha inválido.");
+            throw new UsernameOrPasswordInvalidException("Invalid username or password.");
         }
     }
 }
