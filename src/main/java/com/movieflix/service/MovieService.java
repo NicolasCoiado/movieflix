@@ -57,9 +57,14 @@ public class MovieService {
         return Optional.empty();
     }
 
-    public List<Movie> findByCategory (Long categoryId){
-        return repository.findMovieByCategories(List.of(Category.builder().id(categoryId).build()));
+    public List<Movie> findByCategory (List<Long> categoriesIds){
+        List<Category> categories = categoriesIds.stream()
+                .map(id -> categoryService
+                        .findByCategoryId(id)
+                        .orElseThrow(() -> new IllegalStateException("Category not found: " + id))
+                ).toList();
 
+        return repository.findByCategoriesIn(categories);
     }
 
     public void delete(Long movieId){

@@ -1,5 +1,6 @@
 package com.movieflix.controller;
 
+import com.movieflix.controller.documentation.MovieControllerDoc;
 import com.movieflix.controller.request.MovieRequest;
 import com.movieflix.controller.response.MovieResponse;
 import com.movieflix.entity.Movie;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("movieflix/movies")
 @RequiredArgsConstructor
-public class MovieController {
+public class MovieController implements MovieControllerDoc {
     private final MovieService movieService;
 
     @PostMapping
@@ -46,8 +47,9 @@ public class MovieController {
     }
 
     @GetMapping("/search/")
-    public ResponseEntity<List<MovieResponse>> findByCategory (@RequestParam  Long category){
-        List<MovieResponse> movies = movieService.findByCategory(category)
+    public ResponseEntity<List<MovieResponse>> findByCategory (@RequestParam  List<Long> categoriesIds){
+
+        List<MovieResponse> movies = movieService.findByCategory(categoriesIds)
                 .stream()
                 .map(MovieMapper::toMovieResponse)
                 .toList();
