@@ -36,6 +36,17 @@ public class CategoryController implements CategoryControllerDoc {
         return ResponseEntity.status(HttpStatus.CREATED).body(CategoryMapper.toCategoryResponse(savedCategory));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponse> updateCategory(
+            @PathVariable Long id,
+            @Valid @RequestBody CategoryRequest request) {
+
+        return categoryService.updateCategory(id, request)
+                .map(updatedCategory -> ResponseEntity.ok(CategoryMapper.toCategoryResponse(updatedCategory)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getByCategoryId(@PathVariable Long id) {
         return categoryService.findByCategoryId(id)

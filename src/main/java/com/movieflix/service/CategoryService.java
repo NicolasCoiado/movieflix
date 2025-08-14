@@ -1,5 +1,6 @@
 package com.movieflix.service;
 
+import com.movieflix.controller.request.CategoryRequest;
 import com.movieflix.entity.Category;
 import com.movieflix.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,14 @@ public class CategoryService {
 
     public Optional<Category> findByCategoryId(Long id){
         return repository.findById(id);
+    }
+
+    public Optional<Category> updateCategory(Long id, CategoryRequest request) {
+        return repository.findById(id)
+                .map(existingCategory -> {
+                    existingCategory.setName(request.name());
+                    return repository.save(existingCategory);
+                });
     }
 
     public void deleteByCategoryId(Long id){

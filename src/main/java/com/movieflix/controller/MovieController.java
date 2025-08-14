@@ -47,7 +47,7 @@ public class MovieController implements MovieControllerDoc {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<MovieResponse> edit(
+    public ResponseEntity<MovieResponse> edit (
             @PathVariable Long id,
             @Valid @RequestBody MovieRequest request) {
 
