@@ -1,14 +1,14 @@
 package com.movieflix.mapper;
 
 import com.movieflix.entity.Streaming;
-import com.movieflix.controller.request.StremingRequest;
+import com.movieflix.controller.request.StreamingRequest;
 
 import com.movieflix.controller.response.StreamingResponse;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class StreamingMapper {
-    public static Streaming toStreaming(StremingRequest request) {
+    public static Streaming toStreaming(StreamingRequest request) {
         return Streaming
                 .builder()
                 .name(request.name())

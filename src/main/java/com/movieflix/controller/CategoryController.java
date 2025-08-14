@@ -37,7 +37,7 @@ public class CategoryController implements CategoryControllerDoc {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponse> updateCategory(
+    public ResponseEntity<CategoryResponse> update (
             @PathVariable Long id,
             @Valid @RequestBody CategoryRequest request) {
 

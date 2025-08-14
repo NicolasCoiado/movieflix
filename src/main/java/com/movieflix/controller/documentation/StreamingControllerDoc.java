@@ -1,6 +1,6 @@
 package com.movieflix.controller.documentation;
 
-import com.movieflix.controller.request.StremingRequest;
+import com.movieflix.controller.request.StreamingRequest;
 import com.movieflix.controller.response.StreamingResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -42,7 +42,7 @@ public interface StreamingControllerDoc {
     )
     @ApiResponse(responseCode = "500", description = "Internal error")
     @PostMapping
-    ResponseEntity<StreamingResponse> save(@Valid @RequestBody StremingRequest request);
+    ResponseEntity<StreamingResponse> save(@Valid @RequestBody StreamingRequest request);
 
     @Operation(
             summary = "Find streaming platform by ID",

@@ -1,7 +1,7 @@
 package com.movieflix.controller;
 
 import com.movieflix.controller.documentation.StreamingControllerDoc;
-import com.movieflix.controller.request.StremingRequest;
+import com.movieflix.controller.request.StreamingRequest;
 import com.movieflix.controller.response.StreamingResponse;
 import com.movieflix.entity.Streaming;
 import com.movieflix.mapper.StreamingMapper;
@@ -30,9 +30,19 @@ public class StreamingController implements StreamingControllerDoc {
     }
 
     @PostMapping
-    public ResponseEntity<StreamingResponse> save(@Valid @RequestBody StremingRequest request) {
+    public ResponseEntity<StreamingResponse> save(@Valid @RequestBody StreamingRequest request) {
         Streaming savedStreaming = streamingService.save(StreamingMapper.toStreaming(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(StreamingMapper.toStreamingRespose(savedStreaming));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<StreamingResponse> update (
+            @PathVariable Long id,
+            @Valid @RequestBody StreamingRequest request) {
+
+        return streamingService.update(id, request)
+                .map(updatedStreaming -> ResponseEntity.ok(StreamingMapper.toStreamingRespose(updatedStreaming)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}")

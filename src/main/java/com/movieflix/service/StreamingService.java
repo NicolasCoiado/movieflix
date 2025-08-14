@@ -1,5 +1,6 @@
 package com.movieflix.service;
 
+import com.movieflix.controller.request.StreamingRequest;
 import com.movieflix.entity.Streaming;
 import com.movieflix.repository.StreamingRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,14 @@ public class StreamingService {
 
     public Streaming save (Streaming streaming){
         return repository.save(streaming);
+    }
+
+    public Optional<Streaming>  update (Long id, StreamingRequest request){
+        return repository.findById(id)
+                .map(existingStreaming -> {
+                    existingStreaming.setName(request.name());
+                    return repository.save(existingStreaming);
+                });
     }
 
     public Optional<Streaming> findById(Long id){
