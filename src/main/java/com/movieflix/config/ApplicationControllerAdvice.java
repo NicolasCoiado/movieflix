@@ -1,5 +1,6 @@
 package com.movieflix.config;
 
+import com.movieflix.exception.CategoryNotFoundException;
 import com.movieflix.exception.UsernameOrPasswordInvalidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -27,5 +28,11 @@ public class ApplicationControllerAdvice {
                 errors.put(((FieldError)error).getField(), error.getDefaultMessage())
         );
         return errors;
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleCategoryNotFoundException(CategoryNotFoundException ex) {
+        return ex.getMessage();
     }
 }

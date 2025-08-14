@@ -3,6 +3,7 @@ package com.movieflix.service;
 import com.movieflix.entity.Category;
 import com.movieflix.entity.Movie;
 import com.movieflix.entity.Streaming;
+import com.movieflix.exception.CategoryNotFoundException;
 import com.movieflix.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,12 +58,21 @@ public class MovieService {
         return Optional.empty();
     }
 
-    public List<Movie> findByCategory (List<Long> categoriesIds){
-        List<Category> categories = categoriesIds.stream()
-                .map(id -> categoryService
-                        .findByCategoryId(id)
-                        .orElseThrow(() -> new IllegalStateException("Category not found: " + id))
-                ).toList();
+    public List<Movie> findByCategory(List<Long> categoriesIds) {
+        List<Long> idsNotFound = new ArrayList<>();
+        List<Category> categories = new ArrayList<>();
+
+        for (Long id : categoriesIds) {
+            categoryService.findByCategoryId(id)
+                    .ifPresentOrElse(
+                            categories::add,
+                            () -> idsNotFound.add(id)
+                    );
+        }
+
+        if (!idsNotFound.isEmpty()) {
+            throw new CategoryNotFoundException("Categories not found: " + idsNotFound);
+        }
 
         return repository.findByCategoriesIn(categories);
     }
