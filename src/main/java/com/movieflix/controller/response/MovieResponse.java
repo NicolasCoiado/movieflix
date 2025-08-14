@@ -15,7 +15,7 @@ public record MovieResponse(
         String description,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         LocalDate releaseDate,
-        double rating,
+        Double rating,
         List<CategoryResponse> categories,
         List<StreamingResponse> stremings
 ) {

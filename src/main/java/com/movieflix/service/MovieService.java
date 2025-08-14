@@ -4,6 +4,7 @@ import com.movieflix.entity.Category;
 import com.movieflix.entity.Movie;
 import com.movieflix.entity.Streaming;
 import com.movieflix.exception.CategoryNotFoundException;
+import com.movieflix.exception.StreamingNotFoundException;
 import com.movieflix.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,12 +34,37 @@ public class MovieService {
         return repository.findById(id);
     }
 
-    public Optional<Movie> updateMovie(Long movieId, Movie updateMovie){
+    public Optional<Movie> updateMovie(Long movieId, Movie updateMovie) {
         Optional<Movie> optMovie = repository.findById(movieId);
-        if(optMovie.isPresent()){
+        if (optMovie.isPresent()) {
 
-            List<Category> categories = this.findCategories(updateMovie.getCategories());
-            List<Streaming> streamings = this.findStreamings(updateMovie.getStreamings());
+            List<Long> categoryIdsRequested = updateMovie.getCategories()
+                    .stream()
+                    .map(Category::getId)
+                    .toList();
+
+            List<Category> categoriesFound = this.findCategories(updateMovie.getCategories());
+            List<Long> missingCategoryIds = categoryIdsRequested.stream()
+                    .filter(id -> categoriesFound.stream().noneMatch(c -> c.getId().equals(id)))
+                    .toList();
+
+            if (!missingCategoryIds.isEmpty()) {
+                throw new CategoryNotFoundException("Categories not found: " + missingCategoryIds);
+            }
+
+            List<Long> streamingIdsRequested = updateMovie.getStreamings()
+                    .stream()
+                    .map(Streaming::getId)
+                    .toList();
+
+            List<Streaming> streamingsFound = this.findStreamings(updateMovie.getStreamings());
+            List<Long> missingStreamingIds = streamingIdsRequested.stream()
+                    .filter(id -> streamingsFound.stream().noneMatch(s -> s.getId().equals(id)))
+                    .toList();
+
+            if (!missingStreamingIds.isEmpty()) {
+                throw new StreamingNotFoundException("Streamings not found: " + missingStreamingIds);
+            }
 
             Movie movie = optMovie.get();
             movie.setTitle(updateMovie.getTitle());
@@ -47,16 +73,80 @@ public class MovieService {
             movie.setRating(updateMovie.getRating());
 
             movie.getCategories().clear();
-            movie.getCategories().addAll(categories);
+            movie.getCategories().addAll(categoriesFound);
 
             movie.getStreamings().clear();
-            movie.getStreamings().addAll(streamings);
+            movie.getStreamings().addAll(streamingsFound);
 
             return Optional.of(repository.save(movie));
         }
 
         return Optional.empty();
     }
+
+    public Optional<Movie> editMovie(Long movieId, Movie editMovie) {
+        Optional<Movie> optMovie = repository.findById(movieId);
+        if (optMovie.isPresent()) {
+
+            Movie movie = optMovie.get();
+
+            if (editMovie.getCategories() != null && !editMovie.getCategories().isEmpty()) {
+                List<Long> categoryIdsRequested = editMovie.getCategories()
+                        .stream()
+                        .map(Category::getId)
+                        .toList();
+
+                List<Category> categoriesFound = this.findCategories(editMovie.getCategories());
+                List<Long> missingCategoryIds = categoryIdsRequested.stream()
+                        .filter(id -> categoriesFound.stream().noneMatch(c -> c.getId().equals(id)))
+                        .toList();
+
+                if (!missingCategoryIds.isEmpty()) {
+                    throw new CategoryNotFoundException("Categories not found: " + missingCategoryIds);
+                }
+
+                movie.getCategories().clear();
+                movie.getCategories().addAll(categoriesFound);
+            }
+
+            if (editMovie.getStreamings() != null && !editMovie.getStreamings().isEmpty()) {
+                List<Long> streamingIdsRequested = editMovie.getStreamings()
+                        .stream()
+                        .map(Streaming::getId)
+                        .toList();
+
+                List<Streaming> streamingsFound = this.findStreamings(editMovie.getStreamings());
+                List<Long> missingStreamingIds = streamingIdsRequested.stream()
+                        .filter(id -> streamingsFound.stream().noneMatch(s -> s.getId().equals(id)))
+                        .toList();
+
+                if (!missingStreamingIds.isEmpty()) {
+                    throw new StreamingNotFoundException("Streamings not found: " + missingStreamingIds);
+                }
+
+                movie.getStreamings().clear();
+                movie.getStreamings().addAll(streamingsFound);
+            }
+
+            if (editMovie.getTitle() != null) {
+                movie.setTitle(editMovie.getTitle());
+            }
+            if (editMovie.getDescription() != null) {
+                movie.setDescription(editMovie.getDescription());
+            }
+            if (editMovie.getReleaseDate() != null) {
+                movie.setReleaseDate(editMovie.getReleaseDate());
+            }
+            if (editMovie.getRating() != null) {
+                movie.setRating(editMovie.getRating());
+            }
+
+            return Optional.of(repository.save(movie));
+        }
+
+        return Optional.empty();
+    }
+
 
     public List<Movie> findByCategory(List<Long> categoriesIds) {
         List<Long> idsNotFound = new ArrayList<>();

@@ -17,7 +17,7 @@ public record MovieRequest(
         @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         LocalDate releaseDate,
         @Schema(type = "double", description = "Movie rating. Eg: 6.6")
-        double rating,
+        Double rating,
         @Schema(type = "array", description = "List of category codes")
         List<Long> categories,
         @Schema(type = "array", description = "List of streaming service codes")

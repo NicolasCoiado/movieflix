@@ -29,7 +29,7 @@ public class Movie {
     @Column(name = "release_date")
     private LocalDate releaseDate;
 
-    private double rating;
+    private Double rating;
 
     @CreationTimestamp
     @Column(name = "created_at")

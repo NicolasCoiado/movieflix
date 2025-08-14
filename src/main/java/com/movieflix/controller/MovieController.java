@@ -46,7 +46,19 @@ public class MovieController implements MovieControllerDoc {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/search/") //TODO: FIX NOT FOUND CATEGORY TO RETURN THIS ERROR TO USER
+    @PatchMapping("/{id}")
+    public ResponseEntity<MovieResponse> edit(
+            @PathVariable Long id,
+            @Valid @RequestBody MovieRequest request) {
+
+        Movie movieToEdit = MovieMapper.toMovie(request);
+
+        return movieService.editMovie(id, movieToEdit)
+                .map(edited -> ResponseEntity.ok(MovieMapper.toMovieResponse(edited)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search/")
     public ResponseEntity<List<MovieResponse>> findByCategory (@RequestParam  List<Long> categoriesIds){
 
         List<MovieResponse> movies = movieService.findByCategory(categoriesIds)
