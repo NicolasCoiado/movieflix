@@ -51,4 +51,6 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "streaming_id"))
     private List<Streaming> streamings;
 
+    @Column(name = "url_img")
+    private String urlImg;
 }

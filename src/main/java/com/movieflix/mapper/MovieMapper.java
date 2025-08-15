@@ -30,6 +30,7 @@ public class MovieMapper {
                 .rating(request.rating())
                 .categories(categories)
                 .streamings(streamings)
+                .urlImg(request.urlImg())
                 .build();
     }
 
@@ -50,6 +51,7 @@ public class MovieMapper {
                 .rating(movie.getRating())
                 .categories(categories)
                 .stremings(streamings)
+                .urlImg(movie.getUrlImg())
                 .build();
     }
 }

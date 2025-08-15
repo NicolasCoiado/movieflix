@@ -21,7 +21,9 @@ public record MovieRequest(
         @Schema(type = "array", description = "List of category codes")
         List<Long> categories,
         @Schema(type = "array", description = "List of streaming service codes")
-        List<Long> streamings
+        List<Long> streamings,
+        @Schema(type = "String", description = "Movie poster")
+        String urlImg
 ) {
 
 }
