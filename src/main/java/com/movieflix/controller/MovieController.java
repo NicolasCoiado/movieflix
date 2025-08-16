@@ -78,4 +78,15 @@ public class MovieController implements MovieControllerDoc {
 
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/generate/{id}")
+    public ResponseEntity<String> generateImg (@PathVariable Long id){
+        Optional<Movie> optMovie = movieService.findById(id);
+        if (optMovie.isPresent()){
+            String generateImage = movieService.generateImg(id);
+            return ResponseEntity.ok(generateImage);
+        }else{
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

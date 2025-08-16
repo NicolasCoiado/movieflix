@@ -1,6 +1,9 @@
 spring:
   application:
     name: movieflix
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
 
   datasource:
     url: jdbc:postgresql://localhost:5432/movieflix

@@ -19,6 +19,7 @@ public class MovieService {
     private final MovieRepository repository;
     private final CategoryService categoryService;
     private final StreamingService streamingService;
+    private final OpenAIService openAIService;
 
     public Movie save (Movie movie){
         movie.setCategories(this.findCategories(movie.getCategories()));
@@ -187,5 +188,11 @@ public class MovieService {
         }
 
         return streamingFound;
+    }
+
+    public String generateImg (Long id){
+        Optional<Movie> movie = repository.findById(id);
+
+        return openAIService.generate(movie.get());
     }
 }
