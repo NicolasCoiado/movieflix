@@ -45,6 +45,20 @@ public interface CategoryControllerDoc {
     ResponseEntity<CategoryResponse> saveCategory(@Valid @RequestBody CategoryRequest request);
 
     @Operation(
+            summary = "Update category",
+            description = "Method responsible for updating an existing category.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(
+            responseCode = "200", description = "Category updated successfully",
+            content = @Content(schema = @Schema(implementation = CategoryResponse.class))
+    )
+    @ApiResponse(responseCode = "404", description = "Category not found")
+    @ApiResponse(responseCode = "500", description = "Internal error")
+    @PutMapping("/{id}")
+    ResponseEntity<CategoryResponse> update(@PathVariable Long id, @Valid @RequestBody CategoryRequest request);
+
+    @Operation(
             summary = "Find category by ID",
             description = "Method responsible for returning a specific category by its ID.",
             security = @SecurityRequirement(name = "bearerAuth")

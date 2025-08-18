@@ -45,6 +45,20 @@ public interface StreamingControllerDoc {
     ResponseEntity<StreamingResponse> save(@Valid @RequestBody StreamingRequest request);
 
     @Operation(
+            summary = "Update streaming platform",
+            description = "Method responsible for updating an existing streaming platform.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(
+            responseCode = "200", description = "Streaming platform updated successfully",
+            content = @Content(schema = @Schema(implementation = StreamingResponse.class))
+    )
+    @ApiResponse(responseCode = "404", description = "Streaming platform not found")
+    @ApiResponse(responseCode = "500", description = "Internal error")
+    @PutMapping("/{id}")
+    ResponseEntity<StreamingResponse> update(@PathVariable Long id, @Valid @RequestBody StreamingRequest request);
+
+    @Operation(
             summary = "Find streaming platform by ID",
             description = "Method responsible for returning a specific streaming platform by its ID.",
             security = @SecurityRequirement(name = "bearerAuth")

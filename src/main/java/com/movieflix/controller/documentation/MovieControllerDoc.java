@@ -17,26 +17,27 @@ import java.util.List;
 
 @Tag(name = "Movie", description = "Methods responsible for managing movies.")
 public interface MovieControllerDoc {
-    
-    @Operation(summary = "Save movie", description = "Method responsible for saving a new movie.")
-    @ApiResponse(responseCode = "201", description = "Movie saved successfully",
-            content = @Content(schema = @Schema(implementation = MovieResponse.class))
+
+    @Operation(
+            summary = "Save movie",
+            description = "Method responsible for saving a new movie."
     )
+    @ApiResponse(responseCode = "201", description = "Movie saved successfully",
+            content = @Content(schema = @Schema(implementation = MovieResponse.class)))
     @ApiResponse(responseCode = "500", description = "Internal error")
     @PostMapping
-    ResponseEntity<MovieResponse> save (@Valid @RequestBody MovieRequest request);
-    
+    ResponseEntity<MovieResponse> save(@Valid @RequestBody MovieRequest request);
+
     @Operation(
             summary = "Find all movies",
             description = "Method responsible for returning all registered movies.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponse(responseCode = "200", description = "Movies successfully listed",
-            content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponse.class)))
-    )
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponse.class))))
     @ApiResponse(responseCode = "500", description = "Internal error")
     @GetMapping
-    ResponseEntity<List<MovieResponse>> findAll ();
+    ResponseEntity<List<MovieResponse>> findAll();
 
     @Operation(
             summary = "Find movie by ID",
@@ -44,12 +45,11 @@ public interface MovieControllerDoc {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponse(responseCode = "200", description = "Movie found successfully",
-            content = @Content(schema = @Schema(implementation = MovieResponse.class))
-    )
+            content = @Content(schema = @Schema(implementation = MovieResponse.class)))
     @ApiResponse(responseCode = "404", description = "Movie not found")
     @ApiResponse(responseCode = "500", description = "Internal error")
     @GetMapping("/{id}")
-    public ResponseEntity<MovieResponse> findById (@PathVariable Long id);
+    ResponseEntity<MovieResponse> findById(@PathVariable Long id);
 
     @Operation(
             summary = "Update movie",
@@ -57,12 +57,23 @@ public interface MovieControllerDoc {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponse(responseCode = "200", description = "Movie updated successfully",
-            content = @Content(schema = @Schema(implementation = MovieResponse.class))
-    )
+            content = @Content(schema = @Schema(implementation = MovieResponse.class)))
     @ApiResponse(responseCode = "404", description = "Movie not found")
     @ApiResponse(responseCode = "500", description = "Internal error")
     @PutMapping("/{id}")
-    public ResponseEntity<MovieResponse> update (@PathVariable Long id, @Valid @RequestBody MovieRequest request);
+    ResponseEntity<MovieResponse> update(@PathVariable Long id, @Valid @RequestBody MovieRequest request);
+
+    @Operation(
+            summary = "Edit movie",
+            description = "Method responsible for partially updating an existing movie.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(responseCode = "200", description = "Movie edited successfully",
+            content = @Content(schema = @Schema(implementation = MovieResponse.class)))
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    @ApiResponse(responseCode = "500", description = "Internal error")
+    @PatchMapping("/{id}")
+    ResponseEntity<MovieResponse> edit(@PathVariable Long id, @Valid @RequestBody MovieRequest request);
 
     @Operation(
             summary = "Search movies by category",
@@ -70,12 +81,10 @@ public interface MovieControllerDoc {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponse(responseCode = "200", description = "Movies found successfully",
-            content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponse.class)))
-    )
-    @ApiResponse(responseCode = "400", description = "Category not found: {id}")
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponse.class))))
     @ApiResponse(responseCode = "500", description = "Internal error")
-    @GetMapping("/search/")
-    ResponseEntity<List<MovieResponse>> findByCategory (@RequestParam  List<Long> categoriesIds);
+    @GetMapping("/search")
+    ResponseEntity<List<MovieResponse>> findByCategory(@RequestParam List<Long> categoriesIds);
 
     @Operation(
             summary = "Delete movie",
@@ -86,5 +95,17 @@ public interface MovieControllerDoc {
     @ApiResponse(responseCode = "404", description = "Movie not found")
     @ApiResponse(responseCode = "500", description = "Internal error")
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete (@PathVariable Long id);
+    ResponseEntity<Void> delete(@PathVariable Long id);
+
+    @Operation(
+            summary = "Generate movie image",
+            description = "Method responsible for generating an image for a specific movie by its ID.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(responseCode = "200", description = "Image generated successfully",
+            content = @Content(schema = @Schema(implementation = String.class)))
+    @ApiResponse(responseCode = "404", description = "Movie not found")
+    @ApiResponse(responseCode = "500", description = "Internal error")
+    @PostMapping("/generate/{id}")
+    ResponseEntity<String> generateImg(@PathVariable Long id);
 }

@@ -1,5 +1,6 @@
 package com.movieflix.controller;
 
+import com.movieflix.controller.documentation.AuthControllerDoc;
 import com.movieflix.controller.request.LoginRequest;
 import com.movieflix.controller.request.UserRequest;
 import com.movieflix.controller.response.LoginResponse;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/movieflix/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthControllerDoc {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
