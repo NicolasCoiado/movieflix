@@ -191,8 +191,20 @@ public class MovieService {
     }
 
     public String generateImg (Long id){
-        Optional<Movie> movie = repository.findById(id);
+        Optional<Movie> optMovie = repository.findById(id);
 
-        return openAIService.generate(movie.get());
+        if (optMovie.isPresent()) {
+            Movie movie = optMovie.get();
+
+            String urlGenerated = openAIService.generate(movie);
+
+            movie.setUrlImg(urlGenerated);
+
+            repository.save(movie);
+
+            return urlGenerated;
+        }
+
+        return null;
     }
 }

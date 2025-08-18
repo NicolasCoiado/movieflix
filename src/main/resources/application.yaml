@@ -27,3 +27,6 @@ springdoc:
 movieflix:
   security:
     secret: ${SECRET_JWT}
+
+path:
+  images: ${PATH_IMAGES}

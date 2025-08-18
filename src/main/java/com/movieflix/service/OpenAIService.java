@@ -5,19 +5,23 @@ import com.movieflix.entity.Movie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.image.*;
 import org.springframework.ai.openai.OpenAiImageOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OpenAIService {
     private final ImageModel imageModel;
-    private final GoogleDriveService googleDriveService;
+
+    @Value("${path.images}")
+    private String pathImages;
 
     public String generate(Movie movie) {
         String categories = movie.getCategories()
@@ -43,22 +47,20 @@ public class OpenAIService {
 
         String b64 = response.getResult().getOutput().getB64Json();
 
-        // Converte Base64 para bytes
-        byte[] imageBytes = Base64.getDecoder().decode(b64);
+        byte[] decodedImageBytes = Base64.getDecoder().decode(b64);
 
         try {
-            // cria arquivo temporário
-            String fileName = UUID.randomUUID().toString() + ".png";
-            java.io.File tempFile = java.io.File.createTempFile("poster-", ".png");
-            try (OutputStream os = new FileOutputStream(tempFile)) {
-                os.write(imageBytes);
-            }
+            Path outImage = Files.createTempFile(
+                    Paths.get(pathImages),
+                    "img_",
+                    ".png"
+            );
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            Files.write(outImage, decodedImageBytes);
+
+            return outImage.toString();
+        } catch (IOException e) {
+            return e.getMessage();
         }
-
-        return "URL";
     }
 }
